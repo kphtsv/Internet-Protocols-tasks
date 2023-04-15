@@ -5,6 +5,7 @@ import json
 
 CONFIG_FILENAME = 'conf.json'
 SERVER_PORT = 123
+PRIMARY_TIME_SERVER = 'vega.cbk.poznan.pl'  # приём-передача 76 мс, страта = 1
 
 
 def write_delay(delay_time: float):
@@ -25,6 +26,9 @@ def get_delay():
     with open(CONFIG_FILENAME, 'r') as c_file:
         d = json.load(c_file)
         return d['delay']
+
+def synchronize():
+    print('syncing')
 
 
 delay = get_delay()  # in seconds
