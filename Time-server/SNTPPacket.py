@@ -7,6 +7,8 @@
 import struct
 
 # TODO: настроить получение времени от сервера
+import time
+
 PRIMARY_TIME_SERVER = 'vega.cbk.poznan.pl'  # приём-передача 76 мс, страта = 1
 
 # TODO: test!
@@ -17,6 +19,10 @@ def time_to_int(time: float):
     seconds = int(time)
     fraction = (time - seconds) * (2 ** 32)
     return seconds, fraction
+
+
+def measure_elapsed_time(address: str):
+    return 0.076  # 76 мс до сервера 'vega.cbk.poznan.pl'
 
 
 class SNTPPacket:
@@ -63,34 +69,26 @@ class SNTPPacket:
     def generate_request(self):  # клиентский метод
         print('generate request')
         self.mode = 3  # client
-
-        self.root_dispersion =  # максимальная ошибка из-за нестабильности часов
-        self.reference_id = PRIMARY_TIME_SERVER  # IP-адрес для вторичных серверов
-        self.reference_timestamp =  # TODO: когда системные часы последний раз были установлены или скорректированны
         self.originate_timestamp =  # Время отправки запроса клиентом, несинхрониз.
-        self.receive_timestamp =  # Время приёма запроса сервером
+                    # time.time не совсем корректно? в этом файле генерируются и запросы, и ответы
+        self.receive_timestamp =  # Время приёма запроса сервером/ответа клиентом
         self.transmit_timestamp =  # время, в кот. запрос покинул клиента, или ответ покинул сервер
-        # опционально, в пакет класть не будем
-        self.key_id = None
-        self.message_digest = None
 
 
-    def generate_response(self): # метод сервера
+    def generate_response(self, reference_id): # метод сервера
         print('generate response')
         self.mode = 4  # server
         self.stratum = 2
         self.poll = 4
         self.precision = -6 # двоичная экспонента которого показывает точность системных часов
-        self.root_delay =  # 76 мс до сервера
-        self.root_dispersion =  # максимальная ошибка из-за нестабильности часов
-        self.reference_id = PRIMARY_TIME_SERVER  # IP-адрес для вторичных серверов
-        self.reference_timestamp =  # TODO: когда системные часы последний раз были установлены или скорректированны
-        self.originate_timestamp =  # Время отправки запроса клиентом, несинхрониз.
-        self.receive_timestamp =  # Время приёма запроса сервером
+        self.root_delay = measure_elapsed_time(reference_id) # 76 мс до сервера
+        self.root_dispersion = 0    # максимальная ошибка из-за нестабильности часов
+                                    # TODO: измерить настоящее значение!
+        self.reference_id = reference_id  # IP-адрес для вторичных серверов
+        # self.reference_timestamp = # update_syncing()
+        # self.originate_timestamp =  # Время отправки запроса клиентом, несинхрониз.
+        self.receive_timestamp =  # Время приёма запроса сервером/ответа клиентом
         self.transmit_timestamp =  # время, в кот. запрос покинул клиента, или ответ покинул сервер
-        # опционально, в пакет класть не будем
-        self.key_id = None
-        self.message_digest = None
 
 
     def from_data(self, data):
@@ -139,8 +137,12 @@ class SNTPPacket:
         return packed
 
 
-    def update_syncing(self, primary_):
+    def update_syncing(self, primary_time_server):
         print() # mode 3 -> 0
         self.mode = 0
+        # self.precision = measure_elapsed_time(primary_time_server)
         self.precision = 0.076
+        self.reference_timestamp = time.time()  # TODO а точно?
+                                                # когда системные часы последний раз были уст. или скорректированы
+
 
