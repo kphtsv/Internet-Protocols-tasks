@@ -1,10 +1,10 @@
 import socket
 import time
 import json
+from SNTPServer import SERVER_PORT
 
 
 CONFIG_FILENAME = 'conf.json'
-SERVER_PORT = 123
 PRIMARY_TIME_SERVER = 'vega.cbk.poznan.pl'  # приём-передача 76 мс, страта = 1
 
 
@@ -27,15 +27,12 @@ def get_delay():
         d = json.load(c_file)
         return d['delay']
 
-def synchronize():
-    print('syncing')
-
 
 delay = get_delay()  # in seconds
 
 print('Port:', SERVER_PORT)
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.bind(('localhost', SERVER_PORT))
+s.bind(('127.0.0.1', SERVER_PORT))
 
 _, address = s.recvfrom(1024)
 

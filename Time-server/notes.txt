@@ -1,0 +1,5 @@
+Серверы точного времени: https://www.ntp-servers.net/servers.html
+Серверы SNTP: https://www.makak.ru/2009/12/01/spisok-sntp-serverov-vremeni-simple-network-time-protocol-dostupnykh-v-internete/
+SNTP RFC: https://www.rfc-editor.org/rfc/rfc4330.txt
+Packet timestamp RFC: https://datatracker.ietf.org/doc/html/rfc8877#name-ntp-64-bit-timestamp-format
+struct doc: https://docs.python.org/3/library/struct.html
