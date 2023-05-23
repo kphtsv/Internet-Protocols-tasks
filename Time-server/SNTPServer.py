@@ -4,9 +4,12 @@ import SNTPPacket
 import SNTPClient
 
 SERVER_PORT = 50123
+NTP_PORT = 123
+TIME1970 = 2208988800
+
 
 class Server:
-    def __init__(self, self_ipaddress: str, primary_time_server: str):
+    def __init__(self, self_ipaddress: str, primary_time_server: str, delay=0):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((self_ipaddress, SERVER_PORT))
         self.client = SNTPClient.Client()  # клиент для отправки запроса в главный сервер
@@ -18,15 +21,16 @@ class Server:
         self.reference_timestamp = None
 
         self.clock_offset = 0
-        # self.synchronize()
+        self.delay = delay
 
     def get_current_time(self):
-        return time.time() + 275.137 + self.clock_offset  # случайное значение для тестирования, должно быть = 0
+        return time.time() + self.clock_offset + self.delay
 
-    def synchronize(self):  # TODO: request-запрос к серверу точного времени
-        self.client.send_request((self.reference_id, SERVER_PORT))
+    def synchronize(self):
+        self.client.send_request((self.reference_id, NTP_PORT))
         clock_offset = SNTPClient.calculate_clock_offset(*self.client.receive_response())
-        self.clock_offset += clock_offset  # TODO: + OR - ?
+
+        self.clock_offset += clock_offset - TIME1970
         self.reference_timestamp = self.get_current_time()
         self.leap_indicator = 0
 

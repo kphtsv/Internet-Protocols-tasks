@@ -33,7 +33,6 @@ class Client:
         self.socket.sendto(request_packet.to_data(), full_server_addr)
 
     def receive_response(self):
-        # TODO: невозможно получить ответ от сервера
         data, _ = self.socket.recvfrom(1024)  # на месте _ стоит ipaddress
         destination_timestamp = self.get_current_time()
         return Packet(data), destination_timestamp

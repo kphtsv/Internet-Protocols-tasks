@@ -67,9 +67,6 @@ class Packet:
             self.rewrite_from_data(data)
 
     def rewrite_from_data(self, data):
-
-        print('Unpacking data:\n{}'.format(data))
-
         try:
             unpacked = struct.unpack(Packet.FORMAT, data[0:struct.calcsize(Packet.FORMAT)])
         except struct.error:
