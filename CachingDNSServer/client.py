@@ -7,5 +7,6 @@ SERVER_PORT = config["server_port"]
 
 client = Client()
 data = b'Hello!'
+print(f'Sending: {data.decode()}')
 client.send(data, (SERVER_IPADDRESS, SERVER_PORT))
 

@@ -4,8 +4,10 @@ import SNTPServer
 import json
 
 
-PRIMARY_TIME_SERVER = '0.ru.pool.ntp.org'  # приём-передача 76 мс, страта = 1
-SERVER_IPADDRESS = 'localhost'
+# PRIMARY_TIME_SERVER = '0.ru.pool.ntp.org'
+PRIMARY_TIME_SERVER = '195.218.227.166'
+SERVER_IPADDRESS = '127.0.0.1'
+PORT = 123
 CONFIG_FILENAME = 'conf.json'
 
 
@@ -19,7 +21,7 @@ def get_delay():
         return d['delay']
 
 
-server = SNTPServer.Server(SERVER_IPADDRESS, PRIMARY_TIME_SERVER, delay=get_delay())  # delay = 5 min
+server = SNTPServer.Server(SERVER_IPADDRESS, PORT, PRIMARY_TIME_SERVER, delay=get_delay())  # delay = 5 min
 
 act_time = time.time()
 print('Actual time:\t\t\t', act_time, timestamp_to_date(act_time))
@@ -31,3 +33,5 @@ server.synchronize()
 print('Clock offset:\t\t\t', server.clock_offset)
 after_sync = server.get_current_time()
 print('Server time after syncing:\t', after_sync, timestamp_to_date(after_sync))
+
+server.process_request()

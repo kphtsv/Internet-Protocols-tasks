@@ -5,5 +5,5 @@ SERVER_IPADDRESS = config["server_ip"]
 SERVER_PORT = config["server_port"]
 
 server = DNSServer.Server(SERVER_IPADDRESS, SERVER_PORT)
-data, full_address = server.receive()
-print(data.decode('utf-8'))
+data, full_address = server.receive_request()
+print(f'Received: {data.decode("utf-8")}')

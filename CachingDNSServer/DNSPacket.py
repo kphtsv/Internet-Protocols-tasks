@@ -192,8 +192,8 @@ class Packet:
                     # TODO надо их как-то записать 
                     indicator = 3
                     tail = get_bits(position, 13, 6)
-
                     second_half = get_bits(position, 7, 8)
                 else:
+
 
 

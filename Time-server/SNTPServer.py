@@ -3,15 +3,14 @@ import time
 import SNTPPacket
 import SNTPClient
 
-SERVER_PORT = 50123
 NTP_PORT = 123
 TIME1970 = 2208988800
 
 
 class Server:
-    def __init__(self, self_ipaddress: str, primary_time_server: str, delay=0):
+    def __init__(self, self_ipaddress: str, port: int,  primary_time_server: str, delay=0):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.bind((self_ipaddress, SERVER_PORT))
+        self.socket.bind((self_ipaddress, port))
         self.client = SNTPClient.Client()  # клиент для отправки запроса в главный сервер
         self.client.socket.settimeout(5)
 

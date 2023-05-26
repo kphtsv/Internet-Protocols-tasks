@@ -13,10 +13,6 @@ class Server:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((self_ipaddress, self_port))
 
-    # def receive(self):
-    #     data, full_client_address = self.socket.recvfrom(1024)
-    #     return data, full_client_address
-
     def receive_request(self):
         data, full_client_address = self.socket.recvfrom(1024)
-
+        return data, full_client_address

@@ -12,5 +12,5 @@ class Client:
     def close(self):
         self.socket.close()
 
-    def send_request(self, full_server_addr: tuple):
-        pass
+    # def send_request(self, full_server_addr: tuple):
+    #     pass

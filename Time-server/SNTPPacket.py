@@ -17,7 +17,7 @@ def measure_elapsed_time(ipaddress: str):
     return 0.076  # 76 мс до сервера 'vega.cbk.poznan.pl'
 
 
-ipv4_pattern = re.compile('(.+).(.+).(.+).(.+)')
+ipv4_pattern = re.compile(r'([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)')
 
 
 def format_reference(stratum: int, reference_id: str):
@@ -26,17 +26,7 @@ def format_reference(stratum: int, reference_id: str):
     else:
         match = re.match(ipv4_pattern, reference_id)
         if match:
-            # a = int(match.group(1))
-            # b = int(match.group(2))
-            # c = int(match.group(3))
-            # d = int(match.group(4))
-            #
-            # # b1 = (int(match.group(1)) * (1 << 4)) | int(match.group(2))
-            # # b2 = (int(match.group(3)) * (1 << 4)) | int(match.group(4))
-
-            # map(lambda x: int(x), match.groups())
-
-            return int.from_bytes(struct.pack('!B4', *map(lambda x: int(x), match.groups())), 'big')
+            return int.from_bytes(struct.pack('! 4B', *map(lambda x: int(x), match.groups())), 'big')
         else:
             raise Exception('Incorrect reference ID.')
 

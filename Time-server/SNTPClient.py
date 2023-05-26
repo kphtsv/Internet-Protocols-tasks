@@ -22,6 +22,7 @@ def calculate_clock_offset(response: Packet, destination_timestamp: float):
 class Client:
     def __init__(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.socket.settimeout(5)
         self.clock_offset = 0
 
     def get_current_time(self):
